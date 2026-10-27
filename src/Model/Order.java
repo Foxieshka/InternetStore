@@ -8,12 +8,16 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 public class Order {
-    private int id; // Номер заказа
+    private final int id; // Номер заказа
     private static int counter; // Счетчик для id
     private PaymentStatus paymentStatus; // Статус оплаты
     private OrderStatus status; // Статус заказа
     private String address; // Адрес доставки
-    private ArrayList<OrderItem> orderItems = new ArrayList<>(); // Позиции заказа
+    private final ArrayList<OrderItem> orderItems = new ArrayList<>(); // Позиции заказа
+
+    private Promocode promocode; // null если не применен
+    private double total; // Сумма
+    private double finalTotal; // Итоговая цена со скидкой
 
     public Order(OrderStatus status,
                  PaymentStatus paymentStatus, String address,
@@ -46,6 +50,8 @@ public class Order {
     public PaymentStatus getPaymentStatus() { return paymentStatus; }
     public OrderStatus getStatus() { return status; }
     public String getAddress() { return address; }
+    public double getTotal() { return  total; }
+    public double getFinalTotal() { return  finalTotal; }
 
     // Сеттеры
     public void setPaymentStatus(PaymentStatus paymentStatus)
@@ -56,7 +62,6 @@ public class Order {
         }
         this.paymentStatus = paymentStatus;
     }
-
     public void setStatus(OrderStatus orderStatus)
     throws InvalidOrderStatus
     {
@@ -65,7 +70,6 @@ public class Order {
         }
         this.status = orderStatus;
     }
-
     public void setAddress(String address){
         this.address = address;
     }

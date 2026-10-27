@@ -25,6 +25,6 @@ public class Food extends Product {
     @Override
     public String getInfo() {
         return "Наименование: " + name + ", Состав: " + components + ", Срок годности: " +
-                expirationDate.toString() + ", Масса: " + weight + " г";
+                expirationDate.toString() + ",\nМасса: " + weight + " г" + ", Цена: " + price + "Р.";
     }
 }

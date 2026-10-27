@@ -6,10 +6,17 @@ import Model.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class Store {
     public Customer user; // Тестовый пользователь
     public ArrayList<Product> products; // Товары
+    LinkedHashMap<String, Promocode> promenades; // Промокоды
+
+    // Геттеры
+    public Customer getUser() { return user; }
+    public ArrayList<Product> getProducts() { return  products; }
+    public LinkedHashMap<String, Promocode> getPromenades() { return promenades; }
 
     // Конструктор
     public Store() {
@@ -18,6 +25,11 @@ public class Store {
         "Лисичкина", "foxieshka@vk.com", "Tkm97rushy");
         // Устанавливаем баланс
         user.setBalance(20000);
+        seedData(); // Заполняем каталог тестовыми товарами
+    }
+
+    // Тестовые данные
+    public void seedData(){
         // Тестовая дата
         LocalDate fishDate = LocalDate.now().plusDays(28);
         LocalDate chocolateDate = LocalDate.now().plusMonths(3);
@@ -33,21 +45,10 @@ public class Store {
                 fishDate, "Охлаждённое мясо форели, соль.", 100));
         products.add(new Food("Молочный шоколад", 180, 5,
                 chocolateDate, "Какао, масло, молоко, фундук, сахар.", 160));
-    }
-
-    // Просмотр каталога
-    public void showCatalog() {
-        // Выводим список товаров
-        System.out.println("\n========= Каталог товаров ==========");
-        for (Product product : products) {
-            System.out.println(product.getInfo() + " - " + product.getPrice() + " Р");
-        }
-        System.out.println("====================================\n");
-    }
-
-    // Просмотр корзины
-    public void showCart() {
-        user.getCart().showCart();
+        // Заполняем список промокодов
+        promenades = new LinkedHashMap<>();
+        promenades.put("LAPKI30", new Promocode("LAPKI30", 30));
+        promenades.put("PAWS10", new Promocode("PAWS10", 10));
     }
 
     // Найти товар по названию
@@ -58,6 +59,15 @@ public class Store {
             }
         }
         return null;
+    }
+
+    // Найти промокод по коду
+    public Promocode findPromocode(String code){
+        Promocode p = promenades.get(code);
+        if (p == null){
+            throw new PromocodeNotFoundException("Промокод " + code + " не найден.");
+        }
+        return p;
     }
 
     // Вывести информацию о товаре
@@ -79,37 +89,15 @@ public class Store {
         if (product.getQuantity() < quantity)
             throw new NotEnoughStockException("На складе только " + product.getQuantity() + " шт.");
         user.addToCart(product, quantity);
-        System.out.println("Добавлено: " + productName + " x" + quantity);
     }
 
     // Удалить из корзины
     public void removeFromCart(String productName) {
-        try {
-            user.removeFromCart(productName);
-            System.out.println("Товар успешно удален из корзины");
-        } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
-        }
-    }
-
-    // Вывести все заказы
-    public void showOrders(){
-        System.out.println("\nЗаказы:");
-        if(user.getOrders().isEmpty()){
-            System.out.println("История заказов пуста.\n");
-        }else {
-            for (Order order : user.getOrders())
-                System.out.println(order.getInfo());
-        }
+        user.removeFromCart(productName);
     }
 
     // Заказать все товары из корзины
-    public void buyAll(){
-        try {
-            user.buyAll();
-        } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
-        }
+    public Order buyAll(PaymentSystem paymentSystem){
+        return user.buyAll(paymentSystem);
     }
-
 }

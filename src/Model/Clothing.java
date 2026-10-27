@@ -17,6 +17,7 @@ public class Clothing extends Product {
     }
     @Override
     public String getInfo() {
-        return "Наименование: " + name + ", Размер: " + size.toString() + ", Цвет: " + color;
+        return "Наименование: " + name + ", Размер: " +
+                size.toString() + ", Цвет: " + color + ",\nЦена: " + price + "Р.";
     }
 }

@@ -5,6 +5,7 @@ import Enums.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 
 public class Customer {
     private static int counter = 0; // Счетчик для артикула
@@ -15,8 +16,8 @@ public class Customer {
     private String password; // Пароль
     private int balance = 0; // Баланс
 
-    private Cart cart = new Cart(); // Корзина
-    private ArrayList<Order> orders = new ArrayList<>(); // Заказы
+    private final Cart cart = new Cart(); // Корзина
+    private final ArrayList<Order> orders = new ArrayList<>(); // Заказы
 
     public Customer(String name, String surname, String email, String password) {
         if(!validateEmail(email)){
@@ -82,7 +83,6 @@ public class Customer {
     }
 
     public void setBalance(int balance) {
-        if (balance < 0) balance = 0;
         this.balance = balance;
     }
 
@@ -97,19 +97,23 @@ public class Customer {
     }
 
     // Методы для работы с заказами
-
-    // Заказать все
-    public void buyAll(){
+    public Order buyAll(PaymentSystem paymentSystem){
         LinkedHashMap<String, CartItem> items = cart.getItems();
         if(items.isEmpty()){
             throw new EmptyOrderItemsException("Корзина пуста.");
         }
         int total = cart.getTotal();
-        if(total > balance){
-            throw new NotEnoughBalanceException(
-                    "Не хватает " + (total - balance) + " Р");
+        if(!paymentSystem.pay(total)){
+            throw new PaymentFailedException("Оплата через «" + paymentSystem.getName() + "» не прошла");
         }
-        Order order = new Order(OrderStatus.ASSEMBLED, PaymentStatus.UPON_RECEIVING,
+        PaymentStatus paymentStatus;
+        if(Objects.equals(paymentSystem.getName(), "Оплата наличными при получении")){
+            paymentStatus = PaymentStatus.UPON_RECEIVING;
+        }else {
+            paymentStatus = PaymentStatus.PAID;
+        }
+
+        Order order = new Order(OrderStatus.ASSEMBLED, paymentStatus,
                 "Улица Ленина, дом 482/1", items);
         orders.add(order); // Добавляем в историю
 
@@ -117,9 +121,9 @@ public class Customer {
         for (CartItem item : cart.getItems().values()) {
             item.getProduct().decreaseQuantity(item.getQuantity());
         }
-
-        balance -= total; // Списываем средства
         cart.clear(); // Очищаем корзину
-        System.out.println("Заказ #" + order.getId() + " оформлен на " + total + " Р");
+        return order;
+//        System.out.println("Заказ #" + order.getId() + " оформлен на " + total + " Р."+
+//                "Способ оплаты: " + paymentSystem.getName());
     }
 }

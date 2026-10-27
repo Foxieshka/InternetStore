@@ -1,3 +1,8 @@
+import Menu.Menu;
+import Model.BalancePayment;
+import Model.CardPayment;
+import Model.CashPayment;
+import Model.PaymentSystem;
 import Store.Store;
 
 import java.util.*;
@@ -5,83 +10,66 @@ import java.util.*;
 public class Main {
     public static Scanner scanner = new Scanner(System.in);
     public static Store catalog = new Store(); // Каталог товаров
-
-    public static void printHelp(){
-        System.out.println("\n========= Доступные команды: =========");
-        System.out.println("1. help - вывести справку по программе");
-        System.out.println("2. exit - выход из программы");
-        System.out.println("3. add - добавить товар в корзину");
-        System.out.println("4. remove - удалить товар из корзины");
-        System.out.println("5. show - просмотреть содержимое корзины");
-        System.out.println("6. buy - купить все товары из корзины");
-        System.out.println("7. info - получить информацию о товаре");
-        System.out.println("8. orders - вывести историю заказов");
-        System.out.println("======================================\n");
-    }
+    public static Menu menu = new Menu(); // Консольное меню
 
     // Добавить товар в корзину по названию
-    public static void add(){
-        System.out.print("Введите название товара: ");
-        String productName = readStr(); // Ввод названия
-        System.out.print("Введите количество: ");
-        int quantity = readInt(); // ввод количества
-        try {
-            catalog.addToCart(productName, quantity);
-        } catch (Exception e){
-            System.out.println("Ошибка: " + e.getMessage());
-        }
+    public static void handleAdd(){
+        String productName = menu.readString("Введите название товара: "); // Ввод названия
+        int quantity = menu.readInt("Введите количество: "); // ввод количества
+        catalog.addToCart(productName, quantity);
+        System.out.println("Добавлено: " + productName + " x" + quantity);
     }
 
     // Удалить из корзины
-    public static void remove(){
-        System.out.print("Введите название товара: ");
-        String productName = readStr();
+    public static void handleRemove(){
+        String productName = menu.readString("Введите название товара: ");
         catalog.removeFromCart(productName);
+        System.out.println("Товар успешно удален из корзины");
     }
 
     // Вывести информацию о товаре
-    public static void getInfo(){
-        System.out.print("Введите название товара: ");
-        String productName = readStr();
+    public static void handleInfo(){
+        String productName = menu.readString("Введите название товара: ");
         catalog.getInfo(productName);
     }
 
-    // Методы для считывания строк и чисел
-    public static int readInt(){
-        int number = scanner.nextInt();
-        scanner.nextLine();
-        return number;
-    }
-
-    public static String readStr(){
-        String str = scanner.nextLine().trim();
-        return str;
+    // Метод для обработки заказа
+    public static void handleBuy(){
+        int choice = menu.choosePaymentSystem();
+        PaymentSystem payment;
+        switch (choice) {
+            case 1: payment = new CardPayment(); break;
+            case 2: payment = new BalancePayment(catalog.getUser()); break;
+            case 3: payment = new CashPayment(); break;
+            default: menu.printError("Неверный выбор"); return;
+        }
+        catalog.buyAll(payment);
     }
 
     public static void main(String[] args) {
         String command; // Команда пользователя
         System.out.println("Добро пожаловать в магазин Lapki!"); // Выводим приветствие
-        catalog.showCatalog();
-        printHelp();
+        menu.printCatalog(catalog);
+        menu.printHelp();
 
         while(true){
             System.out.println("======================================");
-            System.out.print("Введите команду: ");
-            command = scanner.nextLine().trim().toLowerCase();
+            command = menu.readCommand();
             try {
                 switch (command) {
-                    case "help": printHelp(); break;
-                    case "show": catalog.showCart(); break;
-                    case "add": add(); break;
-                    case "remove": remove(); break;
-                    case "orders": catalog.showOrders(); break;
-                    case "buy": catalog.buyAll(); break;
-                    case "info": getInfo(); break;
+                    case "help": menu.printHelp(); break;
+                    case "show": menu.printCart(catalog.getUser().getCart()); break;
+                    case "add": handleAdd(); break;
+                    case "remove": handleRemove(); break;
+                    case "orders": menu.printOrders(catalog); break;
+                    case "buy": handleBuy(); break;
+                    case "info": handleInfo(); break;
                     case "exit": return;
-                    default: System.out.println("Такой команды нет");
+                    case "products": menu.printCatalog(catalog); break;
+                    default: menu.printError("Такой команды нет");
                 }
             } catch (Exception e) {
-                System.out.println("Ошибка: " + e.getMessage());
+                menu.printError(e.getMessage());
             }
             System.out.println("======================================\n");
         }

@@ -35,20 +35,6 @@ public class Cart {
         return items.isEmpty();
     }
 
-    // Вывести содержимое корзины
-    public void showCart(){
-        System.out.println("\nКорзина: ");
-        if (this.isEmpty()) {
-            System.out.println("Корзина пуста\n");
-        }
-        // Выводим содержимое корзины
-        for (String key : items.keySet()) {
-            // Получаем товар из корзины
-            CartItem item = items.get(key);
-            System.out.println(item.getInfo());
-        }
-    }
-
     // Общая сумма заказа
     public int getTotal(){
         int totalSum = 0;

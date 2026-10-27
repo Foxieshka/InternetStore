@@ -10,6 +10,6 @@ public class Pet extends Product {
     }
     @Override
     public String getInfo() {
-        return "Наименование: " + name + ", Вид животного: " + animal + "\n";
+        return "Наименование: " + name + ", Вид животного: " + animal + "Цена: " + price + "Р.";
     }
 }
