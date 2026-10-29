@@ -114,7 +114,7 @@ public class Customer {
         }
 
         Order order = new Order(OrderStatus.ASSEMBLED, paymentStatus,
-                "Улица Ленина, дом 482/1", items);
+                "Улица Ленина, дом 482/1", items, paymentSystem);
         orders.add(order); // Добавляем в историю
 
         // списать товар со склада
@@ -123,7 +123,5 @@ public class Customer {
         }
         cart.clear(); // Очищаем корзину
         return order;
-//        System.out.println("Заказ #" + order.getId() + " оформлен на " + total + " Р."+
-//                "Способ оплаты: " + paymentSystem.getName());
     }
 }

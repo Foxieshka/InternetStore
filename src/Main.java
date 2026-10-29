@@ -43,7 +43,7 @@ public class Main {
             case 3: payment = new CashPayment(); break;
             default: menu.printError("Неверный выбор"); return;
         }
-        catalog.buyAll(payment);
+        menu.printOrderInfo(catalog.buyAll(payment));
     }
 
     public static void main(String[] args) {

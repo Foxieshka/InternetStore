@@ -58,14 +58,14 @@ public class Menu {
         LinkedHashMap<String, Promocode> promenades = store.getPromenades();
         ArrayList<Product> products = store.getProducts();
         // Выводим список товаров
-        System.out.println("\n========= Каталог товаров ==========");
+        System.out.println("========= Каталог товаров ==========");
         for (Product product : products) System.out.println(product.getInfo());
-        System.out.println("====================================\n");
+        System.out.println("====================================");
 
-        System.out.println("\n============ Промокоды ============");
+        System.out.println("============ Промокоды ============");
         // Выводим список промокодов
         for (String key: promenades.keySet()) System.out.println(promenades.get(key).getInfo());
-        System.out.println("====================================\n");
+        System.out.println("====================================");
     }
 
     // Просмотр корзины
@@ -108,7 +108,7 @@ public class Menu {
     }
 
     //Вывести информацию о заказе
-    public void printOrderInfo(){
-        
+    public void printOrderInfo(Order order){
+        System.out.println(order.getInfo());
     }
 }

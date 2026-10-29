@@ -14,6 +14,7 @@ public class Order {
     private OrderStatus status; // Статус заказа
     private String address; // Адрес доставки
     private final ArrayList<OrderItem> orderItems = new ArrayList<>(); // Позиции заказа
+    private PaymentSystem paymentSystem; // Платежная система
 
     private Promocode promocode; // null если не применен
     private double total; // Сумма
@@ -21,7 +22,7 @@ public class Order {
 
     public Order(OrderStatus status,
                  PaymentStatus paymentStatus, String address,
-                 LinkedHashMap<String, CartItem> items) {
+                 LinkedHashMap<String, CartItem> items, PaymentSystem paymentSystem) {
 
         if (paymentStatus == null){
             throw new InvalidPaymentStatus("Статус оплаты не может быть пустым.");
@@ -42,7 +43,9 @@ public class Order {
             CartItem current = items.get(key);
             OrderItem position = new OrderItem(current.getProduct(), current.getQuantity());
             orderItems.add(position);
+            total += position.getTotalPrice();
         }
+        this.paymentSystem = paymentSystem;
     }
 
     // Геттеры
@@ -52,6 +55,7 @@ public class Order {
     public String getAddress() { return address; }
     public double getTotal() { return  total; }
     public double getFinalTotal() { return  finalTotal; }
+    public PaymentSystem getPaymentSystem() { return paymentSystem; }
 
     // Сеттеры
     public void setPaymentStatus(PaymentStatus paymentStatus)
@@ -82,6 +86,7 @@ public class Order {
             result += item.getInfo() + "\n";
         }
         result += "Статус оплаты: " + paymentStatus + ", Статус заказа: " + status;
+        result += "\nСпособ оплаты: " + paymentSystem.getName();
         return result;
     }
 }
