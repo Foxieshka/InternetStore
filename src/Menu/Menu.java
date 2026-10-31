@@ -3,12 +3,10 @@ package Menu;
 import Model.*;
 import Store.Store;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class Menu {
-    public Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
     // Ввод команды
     public String readCommand(){
@@ -28,8 +26,8 @@ public class Menu {
         }
     }
 
-    public String readString(String invite){
-        System.out.print(invite);
+    public String readString(String prompt){
+        System.out.print(prompt);
         return scanner.nextLine().trim();
     }
 
@@ -55,8 +53,8 @@ public class Menu {
 
     // Просмотр каталога
     public void printCatalog(Store store) {
-        LinkedHashMap<String, Promocode> promenades = store.getPromenades();
-        ArrayList<Product> products = store.getProducts();
+        Map<String, Promocode> promenades = store.getPromenades();
+        List<Product> products = store.getProducts();
         // Выводим список товаров
         System.out.println("========= Каталог товаров ==========");
         for (Product product : products) System.out.println(product.getInfo());
@@ -82,6 +80,11 @@ public class Menu {
         }
     }
 
+    // Вывести информацию о товаре
+    public void printProductInfo(Product product){
+        System.out.println(product.getInfo());
+    }
+
     // Вывести историю заказов
     public void printOrders(Store store) {
         System.out.println("\nЗаказы:");
@@ -89,7 +92,7 @@ public class Menu {
             System.out.println("История заказов пуста.\n");
         }else {
             for (Order order : store.getUser().getOrders())
-                System.out.println(order.getInfo());
+                printOrderInfo(order);
         }
     }
 
@@ -102,13 +105,16 @@ public class Menu {
         return readInt(">");
     }
 
-    // Просмотр информации о товаре
-    public void printInfo(){
-
-    }
-
     //Вывести информацию о заказе
     public void printOrderInfo(Order order){
-        System.out.println(order.getInfo());
+        String result = "Заказ #" + order.getId() + "\n";
+        result += "Состав заказа: \n";
+        for (OrderItem item: order.getOrderItems()){
+            result += item.getInfo() + "\n";
+        }
+        result += "Статус оплаты: " + order.getPaymentStatus() +
+                ", Статус заказа: " + order.getStatus();
+        result += "\nСпособ оплаты: " + order.getPaymentSystem().getName();
+        System.out.println(result);
     }
 }

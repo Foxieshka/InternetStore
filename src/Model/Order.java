@@ -5,7 +5,8 @@ import Enums.PaymentStatus;
 import Exceptions.*;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.List;
 
 public class Order {
     private final int id; // Номер заказа
@@ -13,8 +14,8 @@ public class Order {
     private PaymentStatus paymentStatus; // Статус оплаты
     private OrderStatus status; // Статус заказа
     private String address; // Адрес доставки
-    private final ArrayList<OrderItem> orderItems = new ArrayList<>(); // Позиции заказа
-    private PaymentSystem paymentSystem; // Платежная система
+    private final List<OrderItem> orderItems = new ArrayList<>(); // Позиции заказа
+    private final PaymentSystem paymentSystem; // Платежная система
 
     private Promocode promocode; // null если не применен
     private double total; // Сумма
@@ -22,7 +23,7 @@ public class Order {
 
     public Order(OrderStatus status,
                  PaymentStatus paymentStatus, String address,
-                 LinkedHashMap<String, CartItem> items, PaymentSystem paymentSystem) {
+                 Map<String, CartItem> items, PaymentSystem paymentSystem) {
 
         if (paymentStatus == null){
             throw new InvalidPaymentStatus("Статус оплаты не может быть пустым.");
@@ -56,6 +57,7 @@ public class Order {
     public double getTotal() { return  total; }
     public double getFinalTotal() { return  finalTotal; }
     public PaymentSystem getPaymentSystem() { return paymentSystem; }
+    public List<OrderItem> getOrderItems() { return orderItems; }
 
     // Сеттеры
     public void setPaymentStatus(PaymentStatus paymentStatus)
@@ -76,17 +78,5 @@ public class Order {
     }
     public void setAddress(String address){
         this.address = address;
-    }
-
-    // Информация о заказе
-    public String getInfo(){
-        String result = "Заказ #" + id + "\n";
-        result += "Состав заказа: \n";
-        for (OrderItem item: orderItems){
-            result += item.getInfo() + "\n";
-        }
-        result += "Статус оплаты: " + paymentStatus + ", Статус заказа: " + status;
-        result += "\nСпособ оплаты: " + paymentSystem.getName();
-        return result;
     }
 }

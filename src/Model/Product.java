@@ -9,12 +9,12 @@ public abstract class Product {
     private static int counter = 0; // Счетчик для артикула
     private final int article; // Артикул
     protected String name; // Наименование
-    protected int price; // Цена
+    protected double price; // Цена
     protected int quantity; // Количество на складе
     protected final Category category; // Категория
 
     // Конструктор
-    public Product(String name, int price, int quantity, Category category)
+    public Product(String name, double price, int quantity, Category category)
     throws ProductConstructorException {
         if (price < 0 || quantity < 0) {
             throw new ProductConstructorException("Цена и количество не могут быть " +
@@ -36,13 +36,13 @@ public abstract class Product {
     // Геттеры
     public int getArticle() { return article; }
     public String getName() { return name; }
-    public int getPrice() { return price; }
+    public double getPrice() { return price; }
     public int getQuantity() { return quantity; }
     public Category getCategory() { return category; }
 
     // Сеттеры
-    public void setPrice(int price) {
-        if (price < 0) {
+    public void setPrice(double price) {
+        if (price <= 0) {
             throw new PriceBelowZeroException("Цена не может быть отрицательной");
         }
         this.price = price;
@@ -65,20 +65,5 @@ public abstract class Product {
     }
     // Метод для вывода информации о товаре
     public abstract String getInfo();
-
-    // Переопределение equals и hashCode
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true; // Сравнение ссылок
-        if (o == null || getClass() != o.getClass()) return false; // Проверка типа
-        Product customKey = (Product) o;
-        return Objects.equals(article, customKey.article) &&
-                Objects.equals(name, customKey.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(article, name); // Генерация хеша на основе тех же полей
-    }
 }
 

@@ -13,7 +13,7 @@ public class CartItem {
     }
 
     // Метод для получения общей цены
-    public int getTotalPrice() {
+    public double getTotalPrice() {
         return product.getPrice() * quantity;
     }
 

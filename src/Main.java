@@ -30,7 +30,7 @@ public class Main {
     // Вывести информацию о товаре
     public static void handleInfo(){
         String productName = menu.readString("Введите название товара: ");
-        catalog.getInfo(productName);
+        menu.printProductInfo(catalog.findProduct(productName));
     }
 
     // Метод для обработки заказа

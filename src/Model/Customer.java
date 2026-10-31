@@ -98,7 +98,7 @@ public class Customer {
 
     // Методы для работы с заказами
     public Order buyAll(PaymentSystem paymentSystem){
-        LinkedHashMap<String, CartItem> items = cart.getItems();
+        LinkedHashMap<String, CartItem> items = (LinkedHashMap<String, CartItem>) cart.getItems();
         if(items.isEmpty()){
             throw new EmptyOrderItemsException("Корзина пуста.");
         }

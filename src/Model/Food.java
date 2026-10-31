@@ -10,7 +10,7 @@ public class Food extends Product {
     private double weight; // Масса в граммах
 
     // Конструктор
-    public Food(String name, int price, int quantity,
+    public Food(String name, double price, int quantity,
                 LocalDate expirationDate, String components, double weight){
 
         if(expirationDate.isBefore(LocalDate.now())){

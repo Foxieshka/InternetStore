@@ -2,14 +2,19 @@ package Model;
 
 import Exceptions.*;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Cart {
     // Ключ - имя товара, значение - позиция картины
-    private final LinkedHashMap<String, CartItem> items =
-            new LinkedHashMap<>(); // Корзина
+    private final Map<String, CartItem> items; // Корзина
+
+    // Конструктор
+    public Cart(){
+        items = new LinkedHashMap<>();
+    }
 
     // Геттеры
-    public LinkedHashMap<String, CartItem> getItems() { return items; }
+    public Map<String, CartItem> getItems() { return items; }
 
     // Методы для работы с корзиной
     public void add(Product product, int quantity){

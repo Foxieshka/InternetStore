@@ -7,24 +7,28 @@ import Model.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Store {
-    public Customer user; // Тестовый пользователь
-    public ArrayList<Product> products; // Товары
-    LinkedHashMap<String, Promocode> promenades; // Промокоды
+    private final Customer user; // Тестовый пользователь
+    private List<Product> products; // Товары
+    private Map<String, Promocode> promenades; // Промокоды
 
     // Геттеры
     public Customer getUser() { return user; }
-    public ArrayList<Product> getProducts() { return  products; }
-    public LinkedHashMap<String, Promocode> getPromenades() { return promenades; }
+    public List<Product> getProducts() { return  products; }
+    public Map<String, Promocode> getPromenades() { return promenades; }
 
     // Конструктор
     public Store() {
+        products = new ArrayList<>();
+        promenades = new LinkedHashMap<>();
         // Создаем тестового пользователя
-        user = new Customer("Алина",
-        "Лисичкина", "foxieshka@vk.com", "Tkm97rushy");
+        user = new Customer("Алина","Лисичкина",
+                "foxieshka@vk.com", "Tkm97rushy");
         // Устанавливаем баланс
-        user.setBalance(20000);
+        user.setBalance(5000);
         seedData(); // Заполняем каталог тестовыми товарами
     }
 
@@ -68,15 +72,6 @@ public class Store {
             throw new PromocodeNotFoundException("Промокод " + code + " не найден.");
         }
         return p;
-    }
-
-    // Вывести информацию о товаре
-    public void getInfo(String productName){
-        Product product = findProduct(productName);
-        if(product == null){
-            throw new ProductNotFoundException("Товар не найден.");
-        }
-        System.out.println(product.getInfo());
     }
 
     // Добавить в корзину
