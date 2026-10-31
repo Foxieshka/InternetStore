@@ -5,6 +5,7 @@ import Enums.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Objects;
 
 public class Customer {
@@ -14,10 +15,10 @@ public class Customer {
     private String surname; // Фамилия
     private String email; // Электронная почта
     private String password; // Пароль
-    private int balance = 0; // Баланс
+    private double balance = 0; // Баланс
 
     private final Cart cart = new Cart(); // Корзина
-    private final ArrayList<Order> orders = new ArrayList<>(); // Заказы
+    private final List<Order> orders = new ArrayList<>(); // Заказы
 
     public Customer(String name, String surname, String email, String password) {
         if(!validateEmail(email)){
@@ -51,9 +52,9 @@ public class Customer {
     public String getName() { return name; }
     public String getSurname() { return surname; }
     public String getEmail() { return email; }
-    public int getBalance() { return balance; }
+    public double getBalance() { return balance; }
     public Cart getCart() { return cart; }
-    public ArrayList<Order> getOrders() { return orders; }
+    public List<Order> getOrders() { return orders; }
 
     // Сеттеры
     public void setPassword(String password) {
@@ -82,7 +83,7 @@ public class Customer {
         this.surname = surname;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 

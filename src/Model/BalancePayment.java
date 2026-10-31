@@ -5,7 +5,7 @@ public class BalancePayment implements PaymentSystem{
     public BalancePayment(Customer customer) { this.customer = customer; }
 
     @Override
-    public boolean pay(int amount) {
+    public boolean pay(double amount) {
         if (customer.getBalance() < amount) {
             System.out.println("Не хватает " + (customer.getBalance() - amount) + " Р");
             return false;
